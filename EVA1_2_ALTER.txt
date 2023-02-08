@@ -1,0 +1,187 @@
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': *************
+Save password for 'root@localhost'? [Y]es/[N]o/Ne[v]er (default No): N
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 9
+Server version: 8.0.32 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > \use evaluacion_1
+Default schema set to `evaluacion_1`.
+Fetching global names, object names from `evaluacion_1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > show tables;
++------------------------+
+| Tables_in_evaluacion_1 |
++------------------------+
+| primer_tabla           |
++------------------------+
+1 row in set (0.0048 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > des primer_tabla;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'des primer_tabla' at line 1
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > desc primer_tabla;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| id     | int         | YES  |     | NULL    |       |
+| nombre | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+2 rows in set (0.0147 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > ALTER TABLE primer_tabla
+                                             -> ADD COLUMN edad int
+                                             -> AFTER nombre;
+Query OK, 0 rows affected (0.0556 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > desc primer_tabla;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| id     | int         | YES  |     | NULL    |       |
+| nombre | varchar(50) | YES  |     | NULL    |       |
+| edad   | int         | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.0113 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > ALTER TABLE primer_tabla
+                                             -> DROP edad;
+Query OK, 0 rows affected (0.0207 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > desc primer_tabla;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| id     | int         | YES  |     | NULL    |       |
+| nombre | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+2 rows in set (0.0019 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > ALTER TABLE primer_tabla
+                                             -> ADD COLUMN apellidoss varchar(50)
+                                             -> AFTER nombre;
+Query OK, 0 rows affected (0.0194 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > desc primer_tabla;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| id         | int         | YES  |     | NULL    |       |
+| nombre     | varchar(50) | YES  |     | NULL    |       |
+| apellidoss | varchar(50) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.0019 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > ALTER TABLE primer_tabla
+                                             -> RENAME COLUMN apellidoss TO apellidos;
+Query OK, 0 rows affected (0.0206 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > DESC primer_tabla;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| id        | int         | YES  |     | NULL    |       |
+| nombre    | varchar(50) | YES  |     | NULL    |       |
+| apellidos | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > ALTER TABLE primer_tabla
+                                             -> MODIFY nombre varchar(250,
+                                             -> apellido varchar(250);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',
+apellido varchar(250)' at line 2
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > ALTER TABLE primer_tabla
+                                             -> MODIFY nombre varchar(250),
+                                             -> apellido varchar(250);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'apellido varchar(250)' at line 3
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > ALTER TABLE primer_tabla MODIFY nombre varchar(250), MODIFY apellido varchar(250);
+ERROR: 1054 (42S22): Unknown column 'apellido' in 'primer_tabla'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > ALTER TABLE primer_tabla MODIFY nombre varchar(250), MODIFY apellidos varchar(250);
+Query OK, 0 rows affected (0.0483 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > DESC primer_tabla;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| id        | int          | YES  |     | NULL    |       |
+| nombre    | varchar(250) | YES  |     | NULL    |       |
+| apellidos | varchar(250) | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+3 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > CREATE TABLE empleados(
+                                             -> id int,
+                                             -> nombre varchar(50),
+                                             -> fecha_nacimiento datetime,
+                                             -> rfc varchar(13),
+                                             -> ciudad_nacimiento text,
+                                             -> estado int,
+                                             -> numero_tel varchar(50));
+Query OK, 0 rows affected (0.0178 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > DESC empleados;
++-------------------+-------------+------+-----+---------+-------+
+| Field             | Type        | Null | Key | Default | Extra |
++-------------------+-------------+------+-----+---------+-------+
+| id                | int         | YES  |     | NULL    |       |
+| nombre            | varchar(50) | YES  |     | NULL    |       |
+| fecha_nacimiento  | datetime    | YES  |     | NULL    |       |
+| rfc               | varchar(13) | YES  |     | NULL    |       |
+| ciudad_nacimiento | text        | YES  |     | NULL    |       |
+| estado            | int         | YES  |     | NULL    |       |
+| numero_tel        | varchar(50) | YES  |     | NULL    |       |
++-------------------+-------------+------+-----+---------+-------+
+7 rows in set (0.0122 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > ALTER TABLE empleados
+                                             -> ADD nss varchar(20) AFTER rfc,
+                                             -> ADD pais varchar(10) AFTER estado,
+                                             -> RENAME numero_tel TO celular,
+                                             -> ADD tel_fijo varchar(10),
+                                             -> ADD id_depto int AFTER id,
+                                             -> ADD apellido varchar(50) AFTER nombre,
+                                             -> ADD iniciales varchar(10) AFTER apellido;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TO celular,
+ADD tel_fijo varchar(10),
+ADD id_depto int AFTER id,
+ADD apellido va' at line 4
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > ALTER table empleados
+                                             -> ADD apellido varchar(50) AFTER nombre;
+Query OK, 0 rows affected (0.0207 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > ALTER TABLE empleados
+                                             -> ADD nss varchar(20) AFTER rfc,
+                                             -> ADD pais varchar(10) AFTER estado,
+                                             -> RENAME COLUMN numero_tel TO celular,
+                                             -> ADD tel_fijo varchar(10),
+                                             -> ADD id_depto int AFTER id,
+                                             -> ADD iniciales varchar(10) AFTER apellido;
+Query OK, 0 rows affected (0.0252 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > DESC empleados;
++-------------------+-------------+------+-----+---------+-------+
+| Field             | Type        | Null | Key | Default | Extra |
++-------------------+-------------+------+-----+---------+-------+
+| id                | int         | YES  |     | NULL    |       |
+| id_depto          | int         | YES  |     | NULL    |       |
+| nombre            | varchar(50) | YES  |     | NULL    |       |
+| apellido          | varchar(50) | YES  |     | NULL    |       |
+| iniciales         | varchar(10) | YES  |     | NULL    |       |
+| fecha_nacimiento  | datetime    | YES  |     | NULL    |       |
+| rfc               | varchar(13) | YES  |     | NULL    |       |
+| nss               | varchar(20) | YES  |     | NULL    |       |
+| ciudad_nacimiento | text        | YES  |     | NULL    |       |
+| estado            | int         | YES  |     | NULL    |       |
+| pais              | varchar(10) | YES  |     | NULL    |       |
+| celular           | varchar(50) | YES  |     | NULL    |       |
+| tel_fijo          | varchar(10) | YES  |     | NULL    |       |
++-------------------+-------------+------+-----+---------+-------+
+13 rows in set (0.0022 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL >
