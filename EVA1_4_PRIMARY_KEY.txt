@@ -1,0 +1,206 @@
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': *************
+Save password for 'root@localhost'? [Y]es/[N]o/Ne[v]er (default No): N
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.32 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| evaluacion_1       |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.0106 sec)
+ MySQL  localhost:3306 ssl  SQL > \use evaluacion_1
+Default schema set to `evaluacion_1`.
+Fetching global names, object names from `evaluacion_1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > show tables;
++------------------------+
+| Tables_in_evaluacion_1 |
++------------------------+
+| empleados              |
+| primer_tabla           |
++------------------------+
+2 rows in set (0.0021 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > SELECT *
+                                             -> FROM empleados
+                                             -> ;
+Empty set (0.0241 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > DESC empleados;
++-------------------+-------------+------+-----+---------+-------+
+| Field             | Type        | Null | Key | Default | Extra |
++-------------------+-------------+------+-----+---------+-------+
+| id                | int         | YES  |     | NULL    |       |
+| id_depto          | int         | YES  |     | NULL    |       |
+| nombre            | varchar(50) | YES  |     | NULL    |       |
+| apellido          | varchar(50) | YES  |     | NULL    |       |
+| iniciales         | varchar(10) | YES  |     | NULL    |       |
+| fecha_nacimiento  | datetime    | YES  |     | NULL    |       |
+| rfc               | varchar(13) | YES  |     | NULL    |       |
+| nss               | varchar(20) | YES  |     | NULL    |       |
+| ciudad_nacimiento | text        | YES  |     | NULL    |       |
+| estado            | int         | YES  |     | NULL    |       |
+| pais              | varchar(10) | YES  |     | NULL    |       |
+| celular           | varchar(50) | YES  |     | NULL    |       |
+| tel_fijo          | varchar(10) | YES  |     | NULL    |       |
++-------------------+-------------+------+-----+---------+-------+
+13 rows in set (0.0107 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > desc primer_tabla;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| id        | int          | YES  |     | NULL    |       |
+| nombre    | varchar(250) | YES  |     | NULL    |       |
+| apellidos | varchar(250) | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+3 rows in set (0.0021 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > CREATE TABLE alumnos(
+                                             -> no_control varchar(15) NOT NULL,
+                                             -> nombre varchar(50) NOT NULL,
+                                             -> apellidos varchar(50) NOT NULL,
+                                             -> edad int NOT NULL,
+                                             -> carrera int NOT NULL,
+                                             -> especialidad int,
+                                             -> telefono varchar(10),
+                                             -> direccion varchar(60));
+Query OK, 0 rows affected (0.0327 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > desc alumnos;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| no_control   | varchar(15) | NO   |     | NULL    |       |
+| nombre       | varchar(50) | NO   |     | NULL    |       |
+| apellidos    | varchar(50) | NO   |     | NULL    |       |
+| edad         | int         | NO   |     | NULL    |       |
+| carrera      | int         | NO   |     | NULL    |       |
+| especialidad | int         | YES  |     | NULL    |       |
+| telefono     | varchar(10) | YES  |     | NULL    |       |
+| direccion    | varchar(60) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+8 rows in set (0.0024 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > INSERT INTO alumnos(
+                                             -> nombre,
+                                             -> apellidos,
+                                             -> edad,
+                                             -> carrera,
+                                             -> especialidad,
+                                             -> telefono,
+                                             -> direccion)
+                                             -> values('Kevin', 'Lozano', 21, 6, 2,'6142778899','Calle del Sistema 8402');
+ERROR: 1364 (HY000): Field 'no_control' doesn't have a default value
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > SELECT *
+                                             -> FROM alumnos;
+Empty set (0.0005 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > INSERT INTO alumnos( no_control, nombre, apellidos, edad, carrera) values('19550801','Kevin', 'Lozano', 21, 6);
+Query OK, 1 row affected (0.0129 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > SELECT
+                                             -> * FROM alumnos;
++------------+--------+-----------+------+---------+--------------+----------+-----------+
+| no_control | nombre | apellidos | edad | carrera | especialidad | telefono | direccion |
++------------+--------+-----------+------+---------+--------------+----------+-----------+
+| 19550801   | Kevin  | Lozano    |   21 |       6 |         NULL | NULL     | NULL      |
++------------+--------+-----------+------+---------+--------------+----------+-----------+
+1 row in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > ALTER TABLE alumnos
+                                             -> MODIFY no_control varchar(15) NOT NULL UNIQUE;
+Query OK, 0 rows affected (0.0636 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > SELECT  * FROM alumnos;
++------------+--------+-----------+------+---------+--------------+----------+-----------+
+| no_control | nombre | apellidos | edad | carrera | especialidad | telefono | direccion |
++------------+--------+-----------+------+---------+--------------+----------+-----------+
+| 19550801   | Kevin  | Lozano    |   21 |       6 |         NULL | NULL     | NULL      |
++------------+--------+-----------+------+---------+--------------+----------+-----------+
+1 row in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > desc alumnos;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| no_control   | varchar(15) | NO   | PRI | NULL    |       |
+| nombre       | varchar(50) | NO   |     | NULL    |       |
+| apellidos    | varchar(50) | NO   |     | NULL    |       |
+| edad         | int         | NO   |     | NULL    |       |
+| carrera      | int         | NO   |     | NULL    |       |
+| especialidad | int         | YES  |     | NULL    |       |
+| telefono     | varchar(10) | YES  |     | NULL    |       |
+| direccion    | varchar(60) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+8 rows in set (0.0018 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > INSERT INTO alumnos( no_control, nombre, apellidos, edad, carrera) values('19550801','Kevin', 'Lozano', 21, 6);
+ERROR: 1062 (23000): Duplicate entry '19550801' for key 'alumnos.no_control'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > INSERT INTO alumnos( no_control, nombre, apellidos, edad, carrera) values('19550799','Kevin', 'Lozano', 21, 6);
+Query OK, 1 row affected (0.0112 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > SELECT  * FROM alumnos;
++------------+--------+-----------+------+---------+--------------+----------+-----------+
+| no_control | nombre | apellidos | edad | carrera | especialidad | telefono | direccion |
++------------+--------+-----------+------+---------+--------------+----------+-----------+
+| 19550799   | Kevin  | Lozano    |   21 |       6 |         NULL | NULL     | NULL      |
+| 19550801   | Kevin  | Lozano    |   21 |       6 |         NULL | NULL     | NULL      |
++------------+--------+-----------+------+---------+--------------+----------+-----------+
+2 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > CREATE TABLE asignaturas(
+                                             -> nombre varchar(;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > CREATE TABLE asignaturas(
+                                             -> nombre varchar(50) NOT NULL,
+                                             -> creditos int NOT NULL,
+                                             -> semestre int NOT NULL,
+                                             -> clave varchar(10) NOT NULL PRIMARY KEY);
+Query OK, 0 rows affected (0.0216 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > DESC asignaturas;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| nombre   | varchar(50) | NO   |     | NULL    |       |
+| creditos | int         | NO   |     | NULL    |       |
+| semestre | int         | NO   |     | NULL    |       |
+| clave    | varchar(10) | NO   | PRI | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+4 rows in set (0.0026 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > INSERT INTO asignaturas(
+                                             -> clave;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > INSERT INTO asignaturas
+                                             -> values('Taller de Bases de Datos', 4,5,'4P5');
+Query OK, 1 row affected (0.0107 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > SELECT *
+                                             -> FROM asignaturas;
++--------------------------+----------+----------+-------+
+| nombre                   | creditos | semestre | clave |
++--------------------------+----------+----------+-------+
+| Taller de Bases de Datos |        4 |        5 | 4P5   |
++--------------------------+----------+----------+-------+
+1 row in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > INSERT INTO asignaturas( nombre, creditos, semestre) values('Taller de Bases de Datos', 4,5);
+ERROR: 1364 (HY000): Field 'clave' doesn't have a default value
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > INSERT INTO asignaturas values('Taller de Bases de Datos', 4,5,'4P5');
+ERROR: 1062 (23000): Duplicate entry '4P5' for key 'asignaturas.PRIMARY'
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > INSERT INTO asignaturas values('Fundamentos de Investigación', 1,4,'2P3');
+Query OK, 1 row affected (0.0105 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL > SELECT * FROM asignaturas;
++------------------------------+----------+----------+-------+
+| nombre                       | creditos | semestre | clave |
++------------------------------+----------+----------+-------+
+| Fundamentos de Investigación |        1 |        4 | 2P3   |
+| Taller de Bases de Datos     |        4 |        5 | 4P5   |
++------------------------------+----------+----------+-------+
+2 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  evaluacion_1  SQL >
