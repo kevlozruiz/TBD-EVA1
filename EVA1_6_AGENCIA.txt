@@ -1,0 +1,181 @@
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': *************
+Save password for 'root@localhost'? [Y]es/[N]o/Ne[v]er (default No): N
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.32 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| evaluacion_1       |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  SQL > CREATE DATABASE Agencia;
+Query OK, 1 row affected (0.0155 sec)
+ MySQL  localhost:3306 ssl  SQL > \use Agencia;
+Default schema set to `Agencia`.
+Fetching global names, object names from `agencia` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  agencia  SQL > show tables;
+Empty set (0.0145 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > CREATE TABLE Automoviles(
+                                        -> no_serie varchar(12) KEY,
+                                        -> marca varchar(60) NOT NULL,
+                                        -> modelo varchar(60) NOT NULL,
+                                        -> año int NOT NULL CHECK( año>1900 AND año<2025),
+                                        -> precio int NOT NULL CHECK(precio>0));
+Query OK, 0 rows affected (0.0365 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > DESC Automoviles;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| no_serie | varchar(12) | NO   | PRI | NULL    |       |
+| marca    | varchar(60) | NO   |     | NULL    |       |
+| modelo   | varchar(60) | NO   |     | NULL    |       |
+| año      | int         | NO   |     | NULL    |       |
+| precio   | int         | NO   |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+5 rows in set (0.0126 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Automoviles(
+                                        -> no_serie,
+                                        -> marca,
+                                        -> modelo,
+                                        -> año,
+                                        -> precio)
+                                        -> VALUES('MZDGT54',
+                                        -> 'Mazda',
+                                        -> 'Mazda 3',
+                                        -> 2022,
+                                        -> 250000);
+Query OK, 1 row affected (0.0169 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Automoviles( no_serie, marca, modelo, año, precio) VALUES('NISSVERSA', 'Nissan', 'Versa GH', 2023, 190000);
+Query OK, 1 row affected (0.0114 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Automoviles( no_serie, marca, modelo, año, precio) VALUES('GOLVW20', 'Volkswaven', 'Gol Sedan', 2019,175000);
+Query OK, 1 row affected (0.0102 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > SELECT *
+                                        -> FROM Automoviles;
++-----------+------------+-----------+------+--------+
+| no_serie  | marca      | modelo    | año | precio |
++-----------+------------+-----------+------+--------+
+| GOLVW20   | Volkswaven | Gol Sedan | 2019 | 175000 |
+| MZDGT54   | Mazda      | Mazda 3   | 2022 | 250000 |
+| NISSVERSA | Nissan     | Versa GH  | 2023 | 190000 |
++-----------+------------+-----------+------+--------+
+3 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Automoviles( no_serie, marca, modelo, año, precio) VALUES('GOLVW20', 'Volkswaven', 'Gol Sedan', 1550,0);
+ERROR: 3819 (HY000): Check constraint 'automoviles_chk_1' is violated.
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Automoviles( no_serie, marca, modelo, año, precio) VALUES('GOLVW20', 'Volkswaven', 'Gol Sedan', 2022,-100000);
+ERROR: 3819 (HY000): Check constraint 'automoviles_chk_2' is violated.
+ MySQL  localhost:3306 ssl  agencia  SQL > CREATE TABLE Vendedores(
+                                        -> clave int KEY AUTO_INCREMENT,
+                                        -> nombre varchar(60) NOT NULL,
+                                        -> apellidos varchar(60) NOT NULL,
+                                        -> rfc varchar(13) NOT NULL,
+                                        -> comision ENUM('3','5','10') NOT NULL);
+Query OK, 0 rows affected (0.0277 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > DESC Vendedores;
++-----------+--------------------+------+-----+---------+----------------+
+| Field     | Type               | Null | Key | Default | Extra          |
++-----------+--------------------+------+-----+---------+----------------+
+| clave     | int                | NO   | PRI | NULL    | auto_increment |
+| nombre    | varchar(60)        | NO   |     | NULL    |                |
+| apellidos | varchar(60)        | NO   |     | NULL    |                |
+| rfc       | varchar(13)        | NO   |     | NULL    |                |
+| comision  | enum('3','5','10') | NO   |     | NULL    |                |
++-----------+--------------------+------+-----+---------+----------------+
+5 rows in set (0.0026 sec)
+MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Vendedores(
+                                        -> nombre,
+                                        -> apellidos,
+                                        -> rfc,
+                                        -> comision)
+                                        -> VALUES('Kevin','Lozano','LORK020918BL3','10');
+MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Vendedores( nombre, apellidos, rfc, comision) VALUES('Kevin','Lozano','LORK020918BL3','8');
+ERROR: 1265 (01000): Data truncated for column 'comision' at row 1
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Vendedores( nombre, apellidos, rfc, comision) VALUES('Raul','Silva','SIRA20918KL3','3');
+Query OK, 1 row affected (0.0030 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Vendedores( nombre, apellidos, rfc, comision) VALUES('Liliana','Ruiz','RUZA791208QN8','5');
+Query OK, 1 row affected (0.0115 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Vendedores( nombre,rfc, comision) VALUES('Liliana','RUZA791208QN8','10');
+ERROR: 1364 (HY000): Field 'apellidos' doesn't have a default value
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Vendedores( rfc, comision) VALUES('RUZA791208QN8','7');
+ERROR: 1265 (01000): Data truncated for column 'comision' at row 1
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Vendedores( rfc, comision) VALUES('RUZA791208QN8','5');
+ERROR: 1364 (HY000): Field 'nombre' doesn't have a default value
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Vendedores(comision) VALUES('4');
+ERROR: 1265 (01000): Data truncated for column 'comision' at row 1
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Vendedores( nombre, apellidos, rfc) VALUES('Liliana','Ruiz','RUZA791208QN8');
+Query OK, 1 row affected (0.0113 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > SELECT *
+                                        -> FROM Vendedores;
++-------+---------+-----------+---------------+----------+
+| clave | nombre  | apellidos | rfc           | comision |
++-------+---------+-----------+---------------+----------+
+|     1 | Kevin   | Lozano    | LORK020918BL3 | 10       |
+|     2 | Raul    | Silva     | SIRA20918KL3  | 3        |
+|     3 | Liliana | Ruiz      | RUZA791208QN8 | 5        |
+|     4 | Liliana | Ruiz      | RUZA791208QN8 | 3        |
++-------+---------+-----------+---------------+----------+
+4 rows in set (0.0026 sec)
+MySQL  localhost:3306 ssl  agencia  SQL > CREATE TABLE Clientes(
+                                        ->  clave int KEY AUTO_INCREMENT,
+                                        -> nombre varchar(60) NOT NULL,
+                                        -> apellidos varchar(60) NOT NULL,
+                                        -> tipo_cliente ENUM('Física','Moral'),
+                                        -> rfc varchar(13) NOT NULL);
+Query OK, 0 rows affected (0.0825 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Clientes(
+                                        -> nombre,
+                                        -> apellidos,
+                                        -> tipo_cliente,
+                                        -> rfc)
+                                        -> VALUES( 'Michelle', 'Ferrales', 'Física', 'FERGB000810');
+Query OK, 1 row affected (0.0219 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > SELECT *
+                                        -> FROM Clientes;
++-------+----------+-----------+--------------+-------------+
+| clave | nombre   | apellidos | tipo_cliente | rfc         |
++-------+----------+-----------+--------------+-------------+
+|     1 | Michelle | Ferrales  | Física       | FERGB000810 |
++-------+----------+-----------+--------------+-------------+
+1 row in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Clientes( nombre, apellidos, tipo_cliente, rfc) VALUES( 'Michelle', 'Ferrales', 'Bailarina', 'FERGB000810');
+ERROR: 1265 (01000): Data truncated for column 'tipo_cliente' at row 1
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Clientes( nombre, apellidos, tipo_cliente, rfc) VALUES( 'ASL', 'Sistemas', 'Moral', 'ASLSoft231717');
+
+Query OK, 1 row affected (0.0121 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Clientes( nombre, tipo_cliente, rfc) VALUES( 'ASL', 'Moral', 'ASLSoft231717');
+ERROR: 1364 (HY000): Field 'apellidos' doesn't have a default value
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Clientes( nombre, apellidos, rfc) VALUES( 'Arte', 'en Concreto', 'ACC21147');
+Query OK, 1 row affected (0.0107 sec)
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Clientes(apellidos, rfc) VALUES('en Concreto', 'ACC21147');
+ERROR: 1364 (HY000): Field 'nombre' doesn't have a default value
+ MySQL  localhost:3306 ssl  agencia  SQL > INSERT INTO Clientes( nombre, apellidos, tipo_cliente) VALUES( 'Michelle', 'Ferrales', 'Física');
+ERROR: 1364 (HY000): Field 'rfc' doesn't have a default value
+MySQL  localhost:3306 ssl  agencia  SQL > SELECT *
+                                        -> FROM Clientes;
++-------+----------+-------------+--------------+---------------+
+| clave | nombre   | apellidos   | tipo_cliente | rfc           |
++-------+----------+-------------+--------------+---------------+
+|     1 | Michelle | Ferrales    | Física       | FERGB000810   |
+|     2 | ASL      | Sistemas    | Moral        | ASLSoft231717 |
+|     3 | Arte     | en Concreto | NULL         | ACC21147      |
++-------+----------+-------------+--------------+---------------+
+3 rows in set (0.0009 sec)
